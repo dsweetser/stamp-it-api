@@ -6,5 +6,4 @@ class Order < ApplicationRecord
   validates :shipping_address, length: { maximum: 500 }, presence: true
   validates :billing_address, length: { maximum: 500 }, presence: true
   validates :total, presence: true
-
 end
