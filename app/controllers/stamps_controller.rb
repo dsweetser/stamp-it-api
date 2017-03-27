@@ -46,7 +46,7 @@ class StampsController < ProtectedController
 
   # Only allow a trusted parameter "white list" through.
   def stamp_params
-    params.require(:stamp).permit(:order, :link, :monochrome_link, :cost)
+    params.require(:stamp).permit(:order_id, :link, :monochrome_link, :cost)
   end
   private :stamp_params
 end
