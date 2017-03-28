@@ -3,7 +3,7 @@
 This is the API for stamp-it, a website that converts your photographs into
 stamps!  The API is built using Ruby on Rails.
 
-ERD: http://i.imgur.com/nD0solV.png
+ERD: http://i.imgur.com/hjIGtuF.png
 
 ## API
 
