@@ -9,8 +9,8 @@ curl "${API}${URL_PATH}" \
   --header "Authorization: Token token=$TOKEN" \
   --data '{
     "list_item": {
-      "stamps_id": "'"${STAMP}"'",
-      "orders_id": "'"${ORDER}"'"
+      "stamp_id": "'"${STAMP}"'",
+      "order_id": "'"${ORDER}"'"
     }
   }'
 

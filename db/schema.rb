@@ -24,12 +24,12 @@ ActiveRecord::Schema.define(version: 20170328010220) do
   end
 
   create_table "list_items", force: :cascade do |t|
-    t.integer  "stamps_id"
-    t.integer  "orders_id"
+    t.integer  "stamp_id"
+    t.integer  "order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["orders_id"], name: "index_list_items_on_orders_id", using: :btree
-    t.index ["stamps_id"], name: "index_list_items_on_stamps_id", using: :btree
+    t.index ["order_id"], name: "index_list_items_on_order_id", using: :btree
+    t.index ["stamp_id"], name: "index_list_items_on_stamp_id", using: :btree
   end
 
   create_table "orders", force: :cascade do |t|
@@ -66,8 +66,8 @@ ActiveRecord::Schema.define(version: 20170328010220) do
   end
 
   add_foreign_key "examples", "users"
-  add_foreign_key "list_items", "orders", column: "orders_id"
-  add_foreign_key "list_items", "stamps", column: "stamps_id"
+  add_foreign_key "list_items", "orders"
+  add_foreign_key "list_items", "stamps"
   add_foreign_key "orders", "list_items"
   add_foreign_key "orders", "users"
   add_foreign_key "stamps", "list_items"
