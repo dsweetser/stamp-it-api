@@ -48,7 +48,7 @@ class OrdersController < ProtectedController
 
   # Only allow a trusted parameter "white list" through.
   def order_params
-    params.require(:order).permit(:stamps, :paid, :total, :billing_address, :shipping_address)
+    params.require(:order).permit(:paid, :total, :billing_address, :shipping_address)
   end
 
   private :order_params

@@ -1,15 +1,16 @@
 #!/bin/bash
 
 API="${API_ORIGIN:-http://localhost:4741}"
-URL_PATH="/stamps"
+URL_PATH="/list_items"
 curl "${API}${URL_PATH}" \
   --include \
   --request POST \
   --header "Content-Type: application/json" \
   --header "Authorization: Token token=$TOKEN" \
   --data '{
-    "stamp": {
-      "cost": "10"
+    "list_item": {
+      "stamps_id": "'"${STAMP}"'",
+      "orders_id": "'"${ORDER}"'"
     }
   }'
 

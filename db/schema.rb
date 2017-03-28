@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327154736) do
+ActiveRecord::Schema.define(version: 20170328010220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 20170327154736) do
     t.index ["user_id"], name: "index_examples_on_user_id", using: :btree
   end
 
+  create_table "list_items", force: :cascade do |t|
+    t.integer  "stamps_id"
+    t.integer  "orders_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["orders_id"], name: "index_list_items_on_orders_id", using: :btree
+    t.index ["stamps_id"], name: "index_list_items_on_stamps_id", using: :btree
+  end
+
   create_table "orders", force: :cascade do |t|
     t.boolean  "paid"
     t.string   "shipping_address"
@@ -31,19 +40,19 @@ ActiveRecord::Schema.define(version: 20170327154736) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "user_id"
-    t.integer  "stamps_id"
-    t.index ["stamps_id"], name: "index_orders_on_stamps_id", using: :btree
+    t.integer  "list_item_id"
+    t.index ["list_item_id"], name: "index_orders_on_list_item_id", using: :btree
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
   create_table "stamps", force: :cascade do |t|
-    t.integer  "order_id"
     t.string   "link"
     t.string   "monochrome_link"
     t.integer  "cost"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.index ["order_id"], name: "index_stamps_on_order_id", using: :btree
+    t.integer  "list_item_id"
+    t.index ["list_item_id"], name: "index_stamps_on_list_item_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -57,6 +66,9 @@ ActiveRecord::Schema.define(version: 20170327154736) do
   end
 
   add_foreign_key "examples", "users"
-  add_foreign_key "orders", "stamps", column: "stamps_id"
+  add_foreign_key "list_items", "orders", column: "orders_id"
+  add_foreign_key "list_items", "stamps", column: "stamps_id"
+  add_foreign_key "orders", "list_items"
   add_foreign_key "orders", "users"
+  add_foreign_key "stamps", "list_items"
 end

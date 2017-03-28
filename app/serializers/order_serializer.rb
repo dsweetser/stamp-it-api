@@ -1,7 +1,7 @@
 # frozen_string_literal:true
 
 class OrderSerializer < ActiveModel::Serializer
-  attributes :id, :stamps, :paid, :total, :billing_address, :user
+  attributes :id, :paid, :total, :billing_address, :user
 
   def user
     object.user.id
