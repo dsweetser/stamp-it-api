@@ -3,7 +3,11 @@
 This is the API for stamp-it, a website that converts your photographs into
 stamps!  The API is built using Ruby on Rails.
 
-ERD: http://i.imgur.com/hjIGtuF.png
+ERD: ![](http://i.imgur.com/hjIGtuF.png)
+
+Front End: https://github.com/dsweetser/stamp-it
+Deployed Front End: https://dsweetser.github.io/stamp-it/
+Deployed API: https://dry-basin-81323.herokuapp.com/
 
 ## API
 
@@ -229,6 +233,247 @@ bin/rake db:migrate db:seed db:examples
 heroku run rake db:migrate VERSION=0
 heroku run rake db:migrate db:seed db:examples
 ```
+
+### STAMPS TABLE
+
+| Verb   | URI Pattern            | Controller#Action |
+|--------|------------------------|-------------------|
+|  GET   | `/stamps`              | `stamps#index`    |
+|  POST  | `/stamps/`             | `stamps#create`   |
+
+### GET /stamps
+
+Returns an index of all the stamps users have created.  No Authentication required.
+
+```sh
+\
+  ```
+
+  response:
+  ```md
+  HTTP/1.1 200 OK
+  Content-Type: application/json; charset=utf-8
+
+  {
+    "stamps": [
+      {
+        "id": 1,
+        "name": "Splendor"
+      },
+      {
+        "id": 2,
+        "name": "Caverna"
+      }
+    ]
+  }
+  ```
+
+### GET /stamps/:id
+
+Returns a single game id. No Authentication required.
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/stamps/" \
+curl "${API}${URL_PATH}" \
+  --include \
+  --request GET
+  ```
+
+
+response:
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "stamps": [
+    {
+      "id": 1,
+      "name": "Splendor"
+    }
+  ]
+}
+```
+
+### POST /stamps
+
+Creates a game and returns json with the game created. Requires authentication.
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/stamps/"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "game": {
+      "name": "'"${NAME}"'"
+    }
+  }'
+```
+
+```md
+HTTP/1.1 201 Created
+{
+  "game": {
+    "id":13,
+    "name":"Carcassonne"
+  }
+}
+```
+
+### SESSION TABLE
+
+| Verb   | URI Pattern            | Controller#Action |
+|--------|------------------------|-------------------|
+|  GET   | `/orders`            | `orders#index`  |
+|  POST  | `/orders/`           | `orders#create` |
+| PATCH  | `/orders/:id`        | `orders#create` |
+| DELETE | `/orders/:id`        | `orders#destroy`|
+
+### GET /orders
+Returns a JSON index of all the orders users have created.  No Authentication required.
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/orders/"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request GET \
+  ```
+
+response
+```md
+HTTP/1.1 200 OK
+{
+  "orders":[
+    {
+      "id":2,
+      "players":2,
+      "rating":5,
+      "notes":null,
+      "user":4,
+      "editable":false,
+      "game":
+      {
+        "id":4,
+        "name":"Takenoko"
+      }
+    }
+    ...
+  ]
+}
+```
+
+### POST /orders/
+
+Creates a new order with the current user's ID. Requires authentication token from the creator, game_id, and a rating.  Returns a JSON string for the created order.
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/orders/"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "order": {
+      "game_id": "'"${GAME}"'",
+      "rating": "'"${RATING}"'",
+      "players": "'"${PLAYERS}"'",
+      "notes": "'"${NOTES}"'"
+    }
+  }'
+  ```
+
+  response
+  ```md
+HTTP/1.1 201 Created
+{
+  "order":
+    {
+    "id":41,
+    "players":2,
+    "rating":4,
+    "notes":"",
+    "user":5,
+    "editable":true,
+    "game":
+      {
+      "id":2,
+      "name":"Caverna"
+      }
+    }
+  }
+```
+
+### PATCH /orders/:id
+
+Updates a order. Requires authentication token from the orders creator, game_id, and a rating.  Returns a JSON string for the updated order.
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/orders/${ID}"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request PATCH \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "order": {
+      "game_id": "'"${GAME}"'",
+      "user_id": "'"${USER}"'",
+      "rating": "'"${RATING}"'",
+      "players": "'"${PLAYERS}"'",
+      "notes": "'"${NOTES}"'"
+    }
+  }'
+  ```
+
+  response
+  ```md
+  HTTP/1.1 200 OK
+  {
+    "order":
+      {
+      "id":41,
+      "players":2,
+      "rating":4,
+      "notes":"dude why didn't I put notes in before!?!?!?",
+      "user":5,
+      "editable":true,
+      "game":
+        {
+        "id":2,
+        "name":"Caverna"
+        }
+      }
+    }
+  ```
+
+  ### DESTROY orders/:id
+
+  Destroys a order. Requires id and authorization token from the original creator of the order.  Returns no content.
+
+  ```sh
+  API="${API_ORIGIN:-http://localhost:4741}"
+  URL_PATH="/orders/${ID}"
+  curl "${API}${URL_PATH}/" \
+    --include \
+    --request DELETE \
+    --header "Content-Type: application/json" \
+    --header "Authorization: Token token=$TOKEN"
+  ```
+
+  response
+  ```md
+  HTTP/1.1 204 No Content
+  ```
+
 
 ## [License](LICENSE)
 
